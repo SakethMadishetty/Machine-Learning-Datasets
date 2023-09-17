@@ -34,7 +34,7 @@ class LinearRegression:
             row={'i': iteration, 'MSE': current_error}
             df=pd.concat([df,pd.DataFrame([row])])
 
-        print(df.to_string())
+        # print(df.to_string())
         plt.plot(df['i'],df['MSE'])
         plt.xlabel("Iteration")
         plt.ylabel("Mean Squared Error")
@@ -88,7 +88,7 @@ data=load_datasets()
 
 data=data.dropna()  #removing null values
 data = data.drop_duplicates()  #removing duplicate rows
-print(data.head())  #visualizing the data frame, if there are any categorial variables they have to be encoded
+# print(data.head())  #visualizing the data frame, if there are any categorial variables they have to be encoded
 # no categorical variables
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
@@ -126,7 +126,7 @@ axes[1,2].set_xlabel("Longitude")
 axes[1,2].set_ylabel("House price of unit area")
 axes[1,2].set_title('Longitude (vs) house price per unit area',fontsize=14)
 plt.subplots_adjust(wspace=0.5,hspace=0.4)
-# plt.show()
+plt.show()
 plt.close()
 #data inspection
 print(data.describe().to_string())
@@ -136,7 +136,7 @@ plt.figure(figsize=(screen_width/100,screen_height/100))
 corr=data.corr()
 sb.heatmap(corr,cmap='coolwarm',annot=True)
 sb.set (rc = {'figure.figsize':(9, 8)})
-# plt.show()
+plt.show()
 plt.close()
 print("\n\n",corr.iloc[:,7].to_string())
 print("Transaction date and house age are less correlated with house price per unit area")
@@ -154,9 +154,9 @@ print(X.to_string())
 y=data.iloc[:,7]
 print(y.to_string())
 
-X_train,X_test,y_train,y_test= sampling(X,y,test_size=0.3)
+X_train,X_test,y_train,y_test= sampling(X,y,test_size=0.1)
 
-model = LinearRegression(learning_rate=0.01, n_iterations=1000)
+model = LinearRegression(learning_rate=0.05, n_iterations=1000)
 model.fit(X_train, y_train)
 
 prediction = model.predict(X_test)
