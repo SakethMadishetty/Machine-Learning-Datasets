@@ -4,7 +4,7 @@
 Part 1 has the code implementation for Linear Regression model without using Scikit libraries 
 and part 2 has the code implmentation using ML libraries.
 
-## Installation
+## Execution
 
 All the requirements are added to requirements.txt file. 
 If you do not have these packages installed you can run the following command to install dependencies.
@@ -26,3 +26,7 @@ The output contains log statements with results and also GUI windows with differ
 **NOTE:** If a GUI window pops up, you need to close the window in order for the code flow to resume.
 
 
+## Additional Information
+
+Team details, Parameters VS MSE log and verbal answers to questions asked in assignment PDF
+are all written in **Assign1** word document added in the root folder.

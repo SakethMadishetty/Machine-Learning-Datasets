@@ -21,8 +21,8 @@ class LinearRegression:
     def fit(self, X, y):
         df=pd.DataFrame(columns=["i","MSE"])
         n_samples, n_features = X.shape
-        self.weights = np.zeros(n_features)
-        self.bias = 0
+        self.weights = np.full(n_features,1.1)
+        self.bias = 0.5
         for iteration in range(self.n_iterations):
             y_pred = np.dot(X, self.weights) + self.bias
             dw = (1 / n_samples) * np.dot(X.T, (y_pred - y))
@@ -34,7 +34,7 @@ class LinearRegression:
             row={'i': iteration, 'MSE': current_error}
             df=pd.concat([df,pd.DataFrame([row])])
 
-        # print(df.to_string())
+        print(df.to_string())
         plt.plot(df['i'],df['MSE'])
         plt.xlabel("Iteration")
         plt.ylabel("Mean Squared Error")
@@ -88,7 +88,8 @@ data=load_datasets()
 
 data=data.dropna()  #removing null values
 data = data.drop_duplicates()  #removing duplicate rows
-# print(data.head())  #visualizing the data frame, if there are any categorial variables they have to be encoded
+print("visualizing the data frame, if there are any categorial variables they have to be encoded")
+print(data.head())
 # no categorical variables
 screen_width = root.winfo_screenwidth()
 screen_height = root.winfo_screenheight()
@@ -98,44 +99,48 @@ plt.title("Scatter plots depicts how every Independent Variable is related to De
 axes[0,0].scatter(data.iloc[:,1],data.iloc[:,7],color='red',alpha=0.5,marker=".")
 axes[0,0].set_xlabel("Transaction date")
 axes[0,0].set_ylabel("House price of unit area")
-axes[0,0].set_title('Transaction date (vs) house price per unit area',fontsize=14)
+axes[0,0].set_title('Transaction date (vs) house price per unit area')
 
 
 axes[0,1].scatter(data.iloc[:,2],data.iloc[:,7],color='green',alpha=0.5,marker="v")
 axes[0,1].set_xlabel("House Age")
 axes[0,1].set_ylabel("House price of unit area")
-axes[0,1].set_title('House Age (vs) house price per unit area',fontsize=14)
+axes[0,1].set_title('House Age (vs) house price per unit area')
 
 axes[0,2].scatter(data.iloc[:,3],data.iloc[:,7],color='orange',alpha=0.8,marker="^")
 axes[0,2].set_xlabel("Distance to the nearest MRT station")
 axes[0,2].set_ylabel("House price of unit area")
-axes[0,2].set_title('Distance to the nearest MRT station (vs) house price per unit area',fontsize=14)
+axes[0,2].set_title('Distance to nearest MRT station (vs) house price per unit area')
 
 axes[1,0].scatter(data.iloc[:,4],data.iloc[:,7],color='violet',alpha=0.8,marker="+")
 axes[1,0].set_xlabel("Number of convenience stores")
 axes[1,0].set_ylabel("House price of unit area")
-axes[1,0].set_title('Number of convenience stores (vs) house price per unit area',fontsize=14)
+axes[1,0].set_title('Number of convenience stores (vs) house price per unit area')
 
 axes[1,1].scatter(data.iloc[:,5],data.iloc[:,7],color='blue',alpha=0.8,marker="p")
 axes[1,1].set_xlabel("Latitude")
 axes[1,1].set_ylabel("House price of unit area")
-axes[1,1].set_title('Latitude (vs) house price per unit area',fontsize=14)
+axes[1,1].set_title('Latitude (vs) house price per unit area')
 
 axes[1,2].scatter(data.iloc[:,6],data.iloc[:,7],color='maroon',alpha=0.6,marker="*")
 axes[1,2].set_xlabel("Longitude")
 axes[1,2].set_ylabel("House price of unit area")
-axes[1,2].set_title('Longitude (vs) house price per unit area',fontsize=14)
+axes[1,2].set_title('Longitude (vs) house price per unit area')
 plt.subplots_adjust(wspace=0.5,hspace=0.4)
 plt.show()
 plt.close()
 #data inspection
+print("data inspection")
 print(data.describe().to_string())
 
 # finding correlation between independent variales and dependent variable
+print("finding correlation between independent variales and dependent variable...")
 plt.figure(figsize=(screen_width/100,screen_height/100))
 corr=data.corr()
 sb.heatmap(corr,cmap='coolwarm',annot=True)
-sb.set (rc = {'figure.figsize':(9, 8)})
+plt.title("Heatmap to show correlation between variables")
+plt.xticks(rotation=45)  # Rotate x-axis labels by 45 degrees
+plt.yticks(rotation=45)  # Rotate y-axis labels by 45 degrees
 plt.show()
 plt.close()
 print("\n\n",corr.iloc[:,7].to_string())
@@ -156,7 +161,7 @@ print(y.to_string())
 
 X_train,X_test,y_train,y_test= sampling(X,y,test_size=0.1)
 
-model = LinearRegression(learning_rate=0.05, n_iterations=1000)
+model = LinearRegression(learning_rate=0.05, n_iterations=2000)
 model.fit(X_train, y_train)
 
 prediction = model.predict(X_test)
@@ -170,10 +175,9 @@ Train_r2=r2_score(y_train,model.predict(X_train))
 print("The meansquared error on Train data: ",Train_mse)
 print("The r squared error on Train data: ",Train_r2)
 
+test_mse = model.mean_squared_error(y_test,prediction)
 print("\n\n")
-print("The meansquared error on test data: ",model.mean_squared_error(y_test,prediction))
+print("The meansquared error on test data: ",test_mse)
 print("The r squared error on test data: ",r2_score(y_test,prediction))
 
-
-
-##################################################################################
+print("Predicted weights : {} \n Predicted bias : {} \n Training MSE : {} \n Testing MSE : {}".format(model.weights,model.bias,Train_mse, test_mse))
